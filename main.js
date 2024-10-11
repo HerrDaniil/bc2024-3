@@ -19,3 +19,27 @@ if (!fs.existsSync(options.input)) {
     console.error('Cannot find input file');
     process.exit(1);
 }
+
+const inputData = fs.readFileSync(options.input, 'utf-8');
+const data = JSON.parse(inputData);
+
+let minValue = Infinity;
+let minAsset = '';
+
+data.forEach(asset => {
+    if (asset.value < minValue) {
+        minValue = asset.value;
+        minAsset = asset.txt;
+    }
+});
+
+let result = `${minAsset}:${minValue}`;
+
+if (options.display) {
+    console.log(result);
+}
+
+if (options.output) {
+    fs.writeFileSync(options.output, result);
+    console.log('Result saved to:', options.output);
+}
